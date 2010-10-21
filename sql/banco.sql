@@ -8,6 +8,7 @@ create table clientes (
   logradouro varchar(60),
   numero varchar(8),
   cep char(8),
+  cidade varchar(60),
   data_nascimento date,
   cpf char(11),
   rg char(16)
