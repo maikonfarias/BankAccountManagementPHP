@@ -1,0 +1,70 @@
+Gerenciamento de contas bancárias.
+
+A prova consitirá na criação de uma base de dados e implementação de um mini sistema para manipular contas correntes.
+
+Totas as transações devem ser gravadas no banco de dados.
+
+Serão considerados os seguintes critérios para avaliação (todos devem ser respeitados para evitar a perda de pontos):
+	Não utilização de programação procedural
+	Encapsulamento
+	Herança
+	Polimorfismo
+	Abstração
+	Método estático
+
+A prova pode ser feita em dúplas.
+
+ATENÇÃO PARA A ENTREGA:
+	A entrega deve ser feita OBRIGATORIAMENTE via e-mail até sexta-feira, 22 de outubro as 18hs.
+	Provas recebidas após esta data e horário terão desconto de 1 ponto na nota final da avaliação.
+	O e-mail de entrega DEVERÁ conter o nome da pessoa ou dupla NO CORPO do e-mail.
+	O assunto DEVE ser AV2/LP2/2EWN-0210.
+	Compacte o código e a base de dados e anexe ao e-mail.
+	Email para entrega: stratu@gmail.com
+	Alunos que ficarem em recuperação serão avisados via e-mail e deverão implementar durante a próxima aula as correções que forem especificadas no e-mail de resultado. Os alunos que não ficarem em recuperação estão dispensados da próxima aula.
+
+
+DADOS DA PROVA
+
+Tabela de clientes
+	código
+	nome
+	endereço completo (desmembre os campos)
+	data de nascimento
+	cpf
+	rg
+
+Tabela de contas correntes
+	agência
+	número
+	cliente
+	saldo
+	limite
+	data de abertura
+
+Tabela de contas poupança
+	agência
+	número
+	cliente
+	saldo
+	data de aniversário
+	data de abertura
+
+[1pt]Implemente a base de dados e conecte utilizando a classe DB utilizada em aula
+
+[1pt]Crie uma classe para clientes chamada "Cliente" (não é necessário implementar os métodos de edição e remoção)
+
+[1pt]Crie uma classe genérica de contas bancárias chamada "Conta".
+	Esta classe deve obrigar a criação dos métodos Deposito, Retirada e Cadastro nas suas classes filhas
+
+[2pt]Crie uma classe para contas correntes chamada "ContaCorrente"
+	A conta corrente deve contemplar limite (saldo negativo)
+	Lembre-se que o método de retirada deve considerar o limite da conta corrente
+
+[2pt]Crie uma classe para contas poupança chamada "ContaPoupanca"
+	A conta poupança deve contemplar data de aniversário
+	Implemente um método chamado RendimentoPoupanca que deve comparar a data atual com a data de aniversário das poupanças. Se for o mesmo dia, deve aumentar o saldo da poupança em 1.2% 
+
+[1pt]Implemente as talas que irão cadastrar clientes, contas correntes e contas poupança.
+
+[2pt]Implemente uma tela onde o cliente poderá fazer retiradas ou depósito na conta corrente ou poupança
