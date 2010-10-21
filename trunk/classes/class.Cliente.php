@@ -33,6 +33,11 @@ class Cliente{
   private $cep;
   
   /**
+   * @var string cidade do cliente
+   */	
+  private $cidade;
+  
+  /**
    * @var string data de nascimento do cliente
    */	
   private $data_nascimento;
@@ -58,6 +63,7 @@ class Cliente{
     $this->logradouro       = '';
     $this->numero           = 0;
     $this->cep              = '';
+    $this->cidade         = '';
     $this->data_nascimento  = '';
     $this->cpf              = '';
     $this->rg               = '';
@@ -104,11 +110,19 @@ class Cliente{
   }
   
   /**
+   * Pega o endereco do cliente
+   * @return string endereco do cliente
+   */
+  public function getCidade(){
+  	return $this->cidade;
+  }
+  
+  /**
    * Pega o data de dascimento do cliente
    * @return string data de nascimento do cliente
    */
   public function getDataNascimento(){
-  	return $this->data_nascimento;
+  	return implode('/',array_reverse(explode('-',$this->data_nascimento)));
   }
   
   /**
@@ -147,11 +161,7 @@ class Cliente{
    */
   public function setNome($value){
   	$value = (string) $value;
-    if (!empty($value)) {
-      $this->nome = $value;
-    } else {
-      throw new Exception('nome deve ser string');
-    }
+    $this->nome = $value;
   }
   
   /**
@@ -160,11 +170,8 @@ class Cliente{
    */
   public function setLogradouro($value){
   	$value = (string) $value;
-    if (!empty($value)) {
-      $this->logradouro = $value;
-    } else {
-      throw new Exception('logradouro deve ser string');
-    }
+    $this->logradouro = $value;
+
   }
   
   /**
@@ -173,11 +180,8 @@ class Cliente{
    */
   public function setNumero($value) {
     $value = (int) $value;
-    if ($value >= 0) {
-      $this->numero = $value;
-    } else {
-      throw new Exception('numero deve ser um numero inteiro positivo');
-    }
+    $this->numero = $value;
+
   }
   
   /**
@@ -186,21 +190,26 @@ class Cliente{
    */
   public function setCep($value){
   	$value = (string) $value;
-    if (!empty($value)) {
-      $this->cep = $value;
-    } else {
-      throw new Exception('cep deve ser string');
-    }
+    $this->cep = $value;
+  }
+  
+  /**
+   * Seta o cidade do cliente
+   * @param $value string cidade do cliente
+   */
+  public function setCidade($value){
+  	$value = (string) $value.'';
+    $this->cidade = $value;
   }
   
   /**
    * Seta o data de nascimento do cliente
    * @param $value string data de nascimento do cliente
    */
-  public function setDataNascimento($value){
+  public function setDataNascimento($value = '01/01/1900'){
   	$value = (string) $value;
     if (!empty($value)) {
-      $this->data_nascimento = $value;
+      $this->data_nascimento = implode('-',array_reverse(explode('/',$value)));
     } else {
       throw new Exception('data de nascimento deve ser string');
     }
@@ -212,11 +221,7 @@ class Cliente{
    */
   public function setCpf($value){
   	$value = (string) $value;
-    if (!empty($value)) {
-      $this->cpf = $value;
-    } else {
-      throw new Exception('cpf deve ser string');
-    }
+    $this->cpf = $value;
   }
   
   /**
@@ -225,23 +230,26 @@ class Cliente{
    */
   public function setRg($value){
   	$value = (string) $value;
-    if (!empty($value)) {
-      $this->rg = $value;
-    } else {
-      throw new Exception('rg deve ser string');
-    }
+    $this->rg = $value;
   }
 
   /**
    * Cadastra o cliente
    * @return true ou false se der erro
    */
-  public function cadastra() {
-    $sSQL = "
-      INSERT INTO clientes (id_cliente, nome, logradouro, numero, cep, data_nascimento, cpf, rg) 
-			VALUES (".$this->id_cliente.",'".$this->nome."','".$this->logradouro."',".$this->numero.",'".$this->cep."', '".$this->data_nascimento."','".$this->cpf.", '".$this->rg."')
-    ";
+  public function cadastrar() {
     $oConn = new DB();
+    
+    $sSQLId = 'SELECT MAX(id_cliente)+1 as id_cliente FROM clientes';
+    $resId = $oConn->query($sSQLId);
+    $oResId = pg_fetch_object($resId);
+    $this->id_cliente = $oResId->id_cliente;
+    
+    $sSQL = "
+      INSERT INTO clientes (id_cliente, nome, logradouro, numero, cep, cidade, data_nascimento, cpf, rg) 
+			VALUES (".$this->id_cliente.",'".$this->nome."','".$this->logradouro."',".$this->numero.",'".$this->cep."', '".$this->cidade."', '".$this->data_nascimento."','".$this->cpf."', '".$this->rg."')
+    ";
+    
     $res = $oConn->query($sSQL);
     
     if ($res) {
@@ -255,8 +263,8 @@ class Cliente{
    * Carrega o cliente
    * @return true ou false se der erro
    */
-  public function carrega($value){
-    $sSQL = "SELECT nome, logradouro, numero, cep, data_nascimento, cpf, rg FROM clientes WHERE id_cliente = '".$value."'";
+  public function carregar($value){
+    $sSQL = "SELECT nome, logradouro, numero, cep, cidade, data_nascimento, cpf, rg FROM clientes WHERE id_cliente = '".$value."'";
 	
     $oConn = new DB();
     $res = $oConn->query($sSQL);
@@ -269,6 +277,7 @@ class Cliente{
       $this->logradouro       = $oResultado->logradouro;
       $this->numero           = $oResultado->numero;
       $this->cep              = $oResultado->cep;
+      $this->cidade           = $oResultado->cidade;
       $this->data_nascimento  = $oResultado->data_nascimento;
       $this->cpf              = $oRestuldado->cpf;
       $this->rg               = $oRestuldado->rg;
@@ -289,6 +298,7 @@ class Cliente{
               logradouro        = '".$this->logradouro."',
               numero            = ". $this->numero.",
               cep               = '".$this->cep."',
+              cidade            = '".$this->cidade."',
               data_nascimento   = '".$this->data_nascimento."',
               cpf               = '".$this->cpf."',
               rg                = '".$this->rg."'
@@ -307,7 +317,10 @@ class Cliente{
    * Remove o cliente
    * @return true ou false se der erro
    */
-  public function remover($value){
+  public function remover($value = ''){
+    if(empty($value)){
+      $value = $this->id_cliente;
+    }
     $sSQL = " DELETE FROM clientes
               WHERE id_cliente = ".$value;	
     $oConn = new DB();
@@ -325,7 +338,7 @@ class Cliente{
    * @return array clientes
    */
   public static function listar ($sWhere = '') {
-    $sSQL = 'SELECT id_cliente, nome, logradouro, numero, cep, data_nascimento, cpf, rg FROM clientes';
+    $sSQL = 'SELECT id_cliente, nome, logradouro, numero, cep, cidade, data_nascimento, cpf, rg FROM clientes';
     if (!empty($sWhere)) {
       $sSQL .= 'WHERE '.$sWhere;
     }
@@ -336,14 +349,15 @@ class Cliente{
     
     while ($oRes = pg_fetch_object($res)) {
       $cliente = new self();
-      $cliente->setIdCliente(       $oRes->id_cliente);
-      $cliente->setNome(            $oRes->nome);
-      $cliente->setLogradouro(      $oRes->logradouro);
-      $cliente->setNumero(          $oRes->numero);
-      $cliente->setCep(             $oRes->cep);
-      $cliente->setDataNascimento(  $oRes->data_nascimento);
-      $cliente->setCpf(             $oRes->cpf);
-      $cliente->setRg(              $oRes->rg);
+      $cliente->setIdCliente      ($oRes->id_cliente);
+      $cliente->setNome           ($oRes->nome);
+      $cliente->setLogradouro     ($oRes->logradouro);
+      $cliente->setNumero         ($oRes->numero);
+      $cliente->setCep            ($oRes->cep);
+      $cliente->setCidade         ($oRes->cidade);
+      $cliente->setDataNascimento ($oRes->data_nascimento);
+      $cliente->setCpf            ($oRes->cpf);
+      $cliente->setRg             ($oRes->rg);
       $aClientes[] = $cliente;
     }
     
