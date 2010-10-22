@@ -10,6 +10,6 @@ echo '<title>Conta Bancaria</title>';
 echo 'Conectado!<br><br>';
 
 $res = $conn->query("SELECT '321etset' as teste");
-$oRes = pg_fetch_object($res);
+$oRes = mysql_fetch_object($res);
 echo $oRes->teste;
 
