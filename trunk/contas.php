@@ -5,11 +5,7 @@ include 'classes/class.Cliente.php';
 
 //classes para manipular as contas
 include 'classes/class.ContaCorrente.php';
-include 'classes/class.ContaPoupança.php';
-
-$oClientes = new Cliente();
-
-
+include 'classes/class.ContaPoupanca.php';
 ?>
 <html>
   <head>
@@ -17,6 +13,9 @@ $oClientes = new Cliente();
   </head>
   <body>
     <h1>Cadastro de Contas</h1>
+    <?php
+    include 'msg.php';
+    ?>
     <fieldset style="width:500px">
       <form action="contas_action.php" method="post">
         <table border="0" width="100%">
@@ -26,13 +25,13 @@ $oClientes = new Cliente();
           <tr>
             <td align="right">Cliente</td>
             <td>
-              <select name="cliente">
+              <select name="id_cliente">
                 <option value="">Escolha um cliente</option>
                 <?php
-                $aClientes = $oClientes::listar();
+                $aClientes = Cliente::listar();
                 foreach($aClientes as $cliente){
                 ?>
-                <option value="<?php echo $oClientes->getIdCliente() ?>"><?php echo $oClientes->getNome() ?></option>
+                <option value="<?php echo $cliente->getIdCliente() ?>"><?php echo $cliente->getNome() ?></option>
                 <?php
                 }
                 ?>
@@ -40,28 +39,41 @@ $oClientes = new Cliente();
             </td>
           </tr>
           <tr>
-            <td align="right">Logradouro:</td>
-            <td><input name="logradouro" size="30" /></td>
+            <td align="right">Tipo de conta:</td>
+            <td>
+              <select name="tp_conta" onchange="
+                if(this.value == 'cc') {
+                  document.getElementById('tdCampo').innerHTML = 'Limite: R$';
+                  document.getElementById('inputCampo').value = '0.00';
+                } else {
+                  document.getElementById('tdCampo').innerHTML = 'Data de Aniversario';
+                  document.getElementById('inputCampo').value = '22/10/2010';
+                }
+              ">
+                <option value="cc">Conta corrente</option>
+                <option value="cp">Conta poupança</option>
+              </select>
+            </td>
           </tr>
           <tr>
-            <td align="right">Numero:</td>
-            <td><input name="numero" size="5" />&nbsp;CEP:&nbsp;<input name="cep" size="10" /></td>
+            <td align="right">Agencia:</td>
+            <td><input name="agencia" size="5" /></td>
           </tr>
           <tr>
-            <td align="right">Cidade:</td>
-            <td><input name="cidade" size="20" /></td>
+            <td align="right">Numero da conta:</td>
+            <td><input name="numero" size="20" /></td>
           </tr>
           <tr>
-            <td align="right">Data de Nascimento:</td>
-            <td><input name="data_nascimento" size="10" value="01/01/1900" /> <font size="2">formato: 00/00/0000</font></td>
+            <td align="right">Saldo inicial: R$</td>
+            <td><input name="saldo" size="10" value="0.00" />
           </tr>
           <tr>
-            <td align="right">CPF:</td>
-            <td><input name="cpf" size="18" /></td>
+            <td id="tdCampo" align="right">Limite: R$</td>
+            <td><input id="inputCampo" name="campo" size="10" value="0.00" /></td>
           </tr>
           <tr>
-            <td align="right">RG:</td>
-            <td><input name="rg" size="15" /></td>
+            <td align="right">Data de abertura:</td>
+            <td><input name="data_abertura" size="15" readonly value="<?php echo date('d/m/Y') ?>" /></td>
           </tr>
           <tr>
             <td align="center" colspan="2">
@@ -76,44 +88,84 @@ $oClientes = new Cliente();
     <fieldset style="width:800px">
       <table width="100%" cellspacing=0>
         <tr style="background: aaa">
-          <td colspan="10" align="center"><b>Lista de clientes</b></td>
+          <td colspan="10" align="center"><b>Lista de contas correntes</b></td>
         </tr>
         <tr style="font-weight:bold">
           <td>id</td>
-          <td>Nome</td>
-          <td>Logradouro</td>
-          <td>Número</td>
-          <td>CEP</td>
-          <td>Cidade</td>
-          <td>Data Nasc.</td>
-          <td>CPF</td>
-          <td>RG</td>
+          <td>Nome cliente</td>
+          <td>Agencia</td>
+          <td>Número da conta</td>
+          <td>Saldo</td>
+          <td>Limite</td>
+          <td>Data de abertura</td>
           <td width="1">&nbsp;</td>
         </tr>
         <?php
-          $aClientes = Cliente::listar();
+          $aCc = ContaCorrente::listar();
           $corFundo = '';
-          if(count($aClientes) == 0){
+          if(count($aCc) == 0){
           ?>
         <tr style="background: ddd">
           <td colspan="10" align="center"><b>Não há registros</b></td>
         </tr>
           <?php
           } else
-          foreach ($aClientes as $cliente) {
+          foreach ($aCc as $cc) {
             $corFundo = ($corFundo == 'ddd')? 'fff' : 'ddd';
             ?>
         <tr style="background: <?php echo $corFundo;?>">
-          <td><?php echo $cliente->getIdCliente();?></td>
-          <td><?php echo $cliente->getNome();?></td>
-          <td><?php echo $cliente->getLogradouro();?></td>
-          <td><?php echo $cliente->getNumero();?></td>
-          <td><?php echo $cliente->getCep();?></td>
-          <td><?php echo $cliente->getCidade();?></td>
-          <td><?php echo $cliente->getDataNascimento();?></td>
-          <td><?php echo $cliente->getCpf();?></td>
-          <td><?php echo $cliente->getRg();?></td>
-          <td width="1"><a href="clientes_action.php?excluir=<?php echo $cliente->getIdCliente(); ?>">Excluir</a></td>
+          <td><?php echo $cc->getIdContaCorrente();?></td>
+          <td><?php echo $cc->cliente->getNome();?></td>
+          <td><?php echo $cc->getAgencia();?></td>
+          <td><?php echo $cc->getNumero();?></td>
+          <td><?php echo $cc->getSaldo();?></td>
+          <td><?php echo $cc->getLimite();?></td>
+          <td><?php echo $cc->getDataAbertura();?></td>
+          <td width="1"><a href="#contas_action.php?excluir=<?php echo $cc->getIdContaCorrente(); ?>">Excluir</a></td>
+        </tr>
+            <?php
+          }
+        ?>
+      </table>
+    </fieldset>
+
+    <fieldset style="width:800px">
+      <table width="100%" cellspacing=0>
+        <tr style="background: aaa">
+          <td colspan="10" align="center"><b>Lista de contas poupança</b></td>
+        </tr>
+        <tr style="font-weight:bold">
+          <td>id</td>
+          <td>Nome cliente</td>
+          <td>Agencia</td>
+          <td>Número da conta</td>
+          <td>Saldo</td>
+          <td>Data de Aniversario</td>
+          <td>Data de abertura</td>
+          <td width="1">&nbsp;</td>
+        </tr>
+        <?php
+          $aCp = ContaPoupanca::listar();
+          $corFundo = '';
+          if(count($aCp) == 0){
+          ?>
+        <tr style="background: ddd">
+          <td colspan="10" align="center"><b>Não há registros</b></td>
+        </tr>
+          <?php
+          } else
+          foreach ($aCp as $cp) {
+            $corFundo = ($corFundo == 'ddd')? 'fff' : 'ddd';
+            ?>
+        <tr style="background: <?php echo $corFundo;?>">
+          <td><?php echo $cp->getIdContaPoupanca();?></td>
+          <td><?php echo $cp->cliente->getNome();?></td>
+          <td><?php echo $cp->getAgencia();?></td>
+          <td><?php echo $cp->getNumero();?></td>
+          <td><?php echo $cp->getSaldo();?></td>
+          <td><?php echo $cp->getDataAniversario();?></td>
+          <td><?php echo $cp->getDataAbertura();?></td>
+          <td width="1"><a href="#contas_action.php?excluir=<?php echo $cp->getIdContaPoupanca(); ?>">Excluir</a></td>
         </tr>
             <?php
           }

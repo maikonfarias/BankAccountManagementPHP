@@ -1,5 +1,5 @@
 <?php
-include 'classes/class.DB.php';
+include_once 'classes/class.DB.php';
 
 /**
  * classe para manipular clientes
@@ -242,7 +242,7 @@ class Cliente{
     
     $sSQLId = 'SELECT MAX(id_cliente) as id_cliente FROM clientes';
     $resId = $oConn->query($sSQLId);
-    $oResId = mysql_fetch_object($resId);
+    $oResId = pg_fetch_object($resId);
     
     //força o numero a ficar int e incrementa em 1
     $this->id_cliente = ($oResId->id_cliente * 1) + 1;
@@ -272,7 +272,7 @@ class Cliente{
     $res = $oConn->query($sSQL);
     
     if ($res) {
-      $oResultado = mysql_fetch_object($res);
+      $oResultado = pg_fetch_object($res);
       
       $this->id_cliente       = $value;
       $this->nome             = $oResultado->nome;
@@ -281,8 +281,8 @@ class Cliente{
       $this->cep              = $oResultado->cep;
       $this->cidade           = $oResultado->cidade;
       $this->data_nascimento  = $oResultado->data_nascimento;
-      $this->cpf              = $oRestuldado->cpf;
-      $this->rg               = $oRestuldado->rg;
+      $this->cpf              = $oResultado->cpf;
+      $this->rg               = $oResultado->rg;
       
       return true;
     } else {
@@ -342,14 +342,15 @@ class Cliente{
   public static function listar ($sWhere = '') {
     $sSQL = 'SELECT id_cliente, nome, logradouro, numero, cep, cidade, data_nascimento, cpf, rg FROM clientes';
     if (!empty($sWhere)) {
-      $sSQL .= 'WHERE '.$sWhere;
+      $sSQL .= ' WHERE '.$sWhere;
     }
+    $sSQL .= ' ORDER BY id_cliente ASC';
     $oConn = new DB();
     $res = $oConn->query($sSQL);
     
     $aClientes = array();
     
-    while ($oRes = mysql_fetch_object($res)) {
+    while ($oRes = pg_fetch_object($res)) {
       $cliente = new self();
       $cliente->setIdCliente      ($oRes->id_cliente);
       $cliente->setNome           ($oRes->nome);

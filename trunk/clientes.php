@@ -1,7 +1,7 @@
 <?php 
 error_reporting(E_ALL);
 //classe para manipular os clientes
-include 'classes/class.Cliente.php';
+include_once 'classes/class.Cliente.php';
 ?>
 <html>
   <head>
@@ -9,6 +9,9 @@ include 'classes/class.Cliente.php';
   </head>
   <body>
     <h1>Cadastro de Clientes</h1>
+    <?php
+    include 'msg.php';
+    ?>
     <fieldset style="width:500px">
       <form action="clientes_action.php" method="post">
         <table border="0" width="100%">
