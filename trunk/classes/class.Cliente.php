@@ -240,10 +240,12 @@ class Cliente{
   public function cadastrar() {
     $oConn = new DB();
     
-    $sSQLId = 'SELECT MAX(id_cliente)+1 as id_cliente FROM clientes';
+    $sSQLId = 'SELECT MAX(id_cliente) as id_cliente FROM clientes';
     $resId = $oConn->query($sSQLId);
-    $oResId = pg_fetch_object($resId);
-    $this->id_cliente = $oResId->id_cliente;
+    $oResId = mysql_fetch_object($resId);
+    
+    //força o numero a ficar int e incrementa em 1
+    $this->id_cliente = ($oResId->id_cliente * 1) + 1;
     
     $sSQL = "
       INSERT INTO clientes (id_cliente, nome, logradouro, numero, cep, cidade, data_nascimento, cpf, rg) 
@@ -255,7 +257,7 @@ class Cliente{
     if ($res) {
       return true;
     } else {
-      throw new Exception('ERRO DE SQL: '.mysql_error());
+      throw new Exception('ERRO DE SQL: '.mysql_error().$sSQL);
     }
   }
   
@@ -347,7 +349,7 @@ class Cliente{
     
     $aClientes = array();
     
-    while ($oRes = pg_fetch_object($res)) {
+    while ($oRes = mysql_fetch_object($res)) {
       $cliente = new self();
       $cliente->setIdCliente      ($oRes->id_cliente);
       $cliente->setNome           ($oRes->nome);
