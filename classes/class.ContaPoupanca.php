@@ -112,7 +112,7 @@ class ContaPoupanca extends Conta{
     
     $sSQLId = 'SELECT MAX(id_cpoupanca) as id_cpoupanca FROM cpoupanca';
     $resId = $oConn->query($sSQLId);
-    $oResId = pg_fetch_object($resId);
+    $oResId = mysql_fetch_object($resId);
     
     //força o numero a ficar int e incrementa em 1
     $this->id_conta = ($oResId->id_cpoupanca * 1) + 1;
@@ -146,7 +146,7 @@ class ContaPoupanca extends Conta{
     
     $aContas = array();
     
-    while ($oRes = pg_fetch_object($res)) {
+    while ($oRes = mysql_fetch_object($res)) {
       $conta = new self();
       $conta->setIdContaPoupanca($oRes->id_cpoupanca);
       $conta->setCliente        ($oRes->id_cliente);

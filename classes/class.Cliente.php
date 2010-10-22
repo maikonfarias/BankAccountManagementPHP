@@ -242,7 +242,7 @@ class Cliente{
     
     $sSQLId = 'SELECT MAX(id_cliente) as id_cliente FROM clientes';
     $resId = $oConn->query($sSQLId);
-    $oResId = pg_fetch_object($resId);
+    $oResId = mysql_fetch_object($resId);
     
     //força o numero a ficar int e incrementa em 1
     $this->id_cliente = ($oResId->id_cliente * 1) + 1;
@@ -272,7 +272,7 @@ class Cliente{
     $res = $oConn->query($sSQL);
     
     if ($res) {
-      $oResultado = pg_fetch_object($res);
+      $oResultado = mysql_fetch_object($res);
       
       $this->id_cliente       = $value;
       $this->nome             = $oResultado->nome;
@@ -350,7 +350,7 @@ class Cliente{
     
     $aClientes = array();
     
-    while ($oRes = pg_fetch_object($res)) {
+    while ($oRes = mysql_fetch_object($res)) {
       $cliente = new self();
       $cliente->setIdCliente      ($oRes->id_cliente);
       $cliente->setNome           ($oRes->nome);
