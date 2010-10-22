@@ -1,5 +1,5 @@
 <?php
-include 'classes/class.DB.php';
+include_once 'classes/class.Cliente.php';
 
 /**
  * classe para manipular contas, não pode ser istanciada, deve ser herdada por outras contas
@@ -49,7 +49,7 @@ abstract class Conta{
     $this->agencia          = '';
     $this->numero           = '';
     $this->saldo            = 0.00;
-    $this->data_abertura    = '';
+    $this->data_abertura    = '2010-10-22';
   }
   
   /**
@@ -125,23 +125,23 @@ abstract class Conta{
   }
   
   /**
-   * Seta o data de nascimento do cliente
-   * @param $value string data de nascimento do cliente
+   * Seta o data de abertura da conta
+   * @param $value string data de abertura da conta
    */
   public function setDataAbertura($value = '01/01/1900'){
   	$value = (string) $value;
     if (!empty($value)) {
       $this->data_abertura = implode('-',array_reverse(explode('/',$value)));
     } else {
-      throw new Exception('data de nascimento deve ser string');
+      throw new Exception('data_abertura deve ser string');
     }
   }
   
-  public abstract function depositar(){}
+  public abstract function depositar($value);
   
-  public abstract function retirar(){}
+  public abstract function retirar($value);
   
-  public abstract function cadastrar(){}
+  public abstract function cadastrar();
   
 }
 
