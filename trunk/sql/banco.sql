@@ -1,3 +1,4 @@
+drop database if exists banco;
 create database banco;
 
 use banco;
@@ -17,8 +18,8 @@ create table clientes (
 create table ccorrente(
   id_cliente int,
   id_ccorrente int primary key,
-  agencia int,
-  numero int,
+  agencia char(11),
+  numero char(11),
   saldo float(11,2),
   limite float(11,2),
   data_abertura date,
@@ -28,8 +29,8 @@ create table ccorrente(
 create table cpoupanca(
   id_cliente int,
   id_cpoupanca int primary key,
-  agencia int,
-  numero int,
+  agencia char(11),
+  numero char(11),
   saldo float,
   data_aniversario date,
   data_abertura date,
