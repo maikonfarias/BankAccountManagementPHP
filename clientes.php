@@ -12,7 +12,7 @@ include 'classes/class.Cliente.php';
     <fieldset style="width:500px">
       <form action="clientes_action.php" method="post">
         <table border="0" width="100%">
-          <tr bgcolor="gray">
+          <tr style="background: aaa">
             <td colspan="2" align="center"><b>Inserir novo cliente</b></td>
           </tr>
           <tr>
@@ -55,7 +55,7 @@ include 'classes/class.Cliente.php';
     <br />
     <fieldset style="width:800px">
       <table width="100%" cellspacing=0>
-        <tr bgcolor="gray">
+        <tr style="background: aaa">
           <td colspan="10" align="center"><b>Lista de clientes</b></td>
         </tr>
         <tr style="font-weight:bold">
@@ -73,6 +73,13 @@ include 'classes/class.Cliente.php';
         <?php
           $aClientes = Cliente::listar();
           $corFundo = '';
+          if(count($aClientes) == 0){
+          ?>
+        <tr style="background: ddd">
+          <td colspan="10" align="center"><b>Não há registros</b></td>
+        </tr>
+          <?php
+          } else
           foreach ($aClientes as $cliente) {
             $corFundo = ($corFundo == 'ddd')? 'fff' : 'ddd';
             ?>
