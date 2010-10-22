@@ -161,6 +161,26 @@ class ContaPoupanca extends Conta{
     return $aContas;
   }
   
+  /**
+   * Metodo para rendimento para poupança
+   * por falta de definição e compreenção do assunto, não sabemos o que é uma data de aniversario de uma conta, uma vez por mes? ano? data de criação?
+   * rendimento sem limites, mas ainda funciona =P
+   */
+  public function rendimentoPoupanca() {
+    $this->saldo = ($this->saldo * (0.012));
+    
+    $oConn = new DB();
+    
+    $sSQL = 'UPDATE cpoupanca SET saldo = '.$this->saldo . ' WHERE id_cpoupanca = '.$this->id_conta;
+    $res = $oConn->query($sSQL);
+    
+    if ($res) {
+      return true;
+    } else {
+      throw new Exception('ERRO DE SQL: '.mysql_error().$sSQL);
+    }
+  }
+  
 }
 
 
