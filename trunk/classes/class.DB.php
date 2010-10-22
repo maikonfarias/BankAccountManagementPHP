@@ -13,13 +13,13 @@ class DB{
   
   public function __construct(){
     if(self::$conexao) return;
-    if(!self::$conexao = mysql_connect('localhost', 'root', 'r53k8b93')){
-    //if(!$this->conexao = pg_connect("host=localhost port=5432 dbname=alcidesmaya user=postgres password=postgres")){
+    //if(!self::$conexao = mysql_connect('localhost', 'root', 'r53k8b93')){
+    if(!$this->conexao = pg_connect("host=localhost port=5432 dbname=alcidesmaya user=postgres password=postgres")){
       throw new Exception('Falha de conexão com o banco');
     }
-    if(!mysql_select_db('banco', self::$conexao)){
+    /*if(!mysql_select_db('banco', self::$conexao)){
        throw new Exception('Falha ao selecionar a base');
-    }
+    }*/
     
   }
   
@@ -29,8 +29,8 @@ class DB{
   }
   
   public function query($sQuery) {
-    return mysql_query($sQuery,self::$conexao);
-    //return pg_query($this->Conn(),$sQuery);
+    //return mysql_query($sQuery,self::$conexao);
+    return pg_query($this->Conn(),$sQuery);
   }
 }
 ?>
