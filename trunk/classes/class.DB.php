@@ -13,9 +13,9 @@ class DB{
   
   public function __construct(){
     if(self::$conexao) return;
-    if(!self::$conexao = mysql_connect('localhost', 'root', 'root')){
+    if(!self::$conexao = mysql_connect('localhost', 'root', 'r53k8b93')){
     //if(!$this->conexao = pg_connect("host=localhost port=5432 dbname=alcidesmaya user=postgres password=postgres")){
-      throw new Exception('Falha de conex√£o com o banco');
+      throw new Exception('Falha de conex„o com o banco');
     }
     if(!mysql_select_db('banco', self::$conexao)){
        throw new Exception('Falha ao selecionar a base');
