@@ -19,8 +19,9 @@ create table ccorrente(
   id_ccorrente int primary key,
   agencia int,
   numero int,
-  saldo float,
-  data_abertura datetime,
+  saldo float(11,2),
+  limite float(11,2),
+  data_abertura date,
   foreign key (id_cliente) references clientes (id_cliente) on delete cascade
 );
 
