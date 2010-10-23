@@ -73,7 +73,7 @@ include 'classes/class.ContaPoupanca.php';
           </tr>
           <tr>
             <td align="right">Data de abertura:</td>
-            <td><input name="data_abertura" size="15" readonly value="<?php echo date('d/m/Y') ?>" /></td>
+            <td><input name="data_abertura" size="15" readonly value="<?php echo @date('d/m/Y') ?>" /></td>
           </tr>
           <tr>
             <td align="center" colspan="2">
